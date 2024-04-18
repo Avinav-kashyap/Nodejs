@@ -28,6 +28,7 @@ server.listen(8000,'127.0.0.1',()=>{
 const fs=require('fs');
 const http=require('http');
 const html=fs.readFileSync('./Template/index.html','utf-8')
+let products=JSON.parse(fs.readFileSync('./Data/products.json','utf-8'))
 
 const server=http.createServer((request,response)=>{
     let path=request.url;
@@ -54,7 +55,22 @@ const server=http.createServer((request,response)=>{
             'my-header':'Hello world'
         });
         response.end(html.replace('{{%CONTENT%}}','You are in contact page now'));
-    }else{
+    }
+    else if(path.toLocaleLowerCase() === '/products')
+    {
+        response.writeHead(200,{
+            'Content-type':'application/json'});
+        response.end('You are in Products page')
+        console.log(products);    
+        fs.readFile('./Data/products.json','utf-8',(error,data)=>{
+            let products=JSON.parse(data)
+            response.end(data);
+
+        }
+
+        )
+    }
+        else{
         response.writeHead(404,{
             'Content-type':'text/html',
             'my-header':'Hello world'
