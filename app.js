@@ -29,6 +29,20 @@ const fs=require('fs');
 const http=require('http');
 const html=fs.readFileSync('./Template/index.html','utf-8')
 let products=JSON.parse(fs.readFileSync('./Data/products.json','utf-8'))
+let productListHtml=fs.readFileSync('./Template/product-list.html','utf-8')
+let productHtmlArray=products.map((prod)=>{
+    let output=productListHtml.replace('{{%IMAGE%}}',prod.productImage);
+    output=output.replace('{{%NAME%}}',prod.name);
+    output=output.replace('{{%MODELNAMES%}}',prod.modeName);
+    output=output.replace('{{%MODELNO%}}',prod.modelNumber);
+    output=output.replace('{{%SIZE%}}',prod.size);
+    output=output.replace('{{%CAMERA%}}',prod.camera);
+    output=output.replace('{{%PRICE%}}',prod.price);
+    output=output.replace('{{%COLOR%}}',prod.color);
+
+    return output;
+
+})
 
 const server=http.createServer((request,response)=>{
     let path=request.url;
@@ -38,7 +52,7 @@ const server=http.createServer((request,response)=>{
             'Content-type':'text/html',
             'my-header':'Hello world'
         });
-        response.end(html.replace('{{%CONTENT%}}','You are in Home Page now'));
+        response.end(html.replace('{{%CONTENT%}}','u r in home page'));
     }
     else if(path.toLocaleLowerCase() === '/about')
     {
@@ -58,10 +72,11 @@ const server=http.createServer((request,response)=>{
     }
     else if(path.toLocaleLowerCase() === '/products')
     {
+        let productResponseHtml=html.replace('{{%CONTENT%}}',productHtmlArray.join(','));
         response.writeHead(200,{
-            'Content-type':'application/json'});
-        response.end('You are in Products page')
-        console.log(products);    
+            'Content-type':'text/html'});
+        response.end(productResponseHtml)
+            
         fs.readFile('./Data/products.json','utf-8',(error,data)=>{
             let products=JSON.parse(data)
             response.end(data);
