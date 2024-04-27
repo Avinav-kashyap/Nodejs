@@ -55,7 +55,12 @@ let productHtmlArray=products.map((prod)=>{
 
 
 
-const server=http.createServer((request,response)=>{
+
+
+
+const server=http.createServer();
+server.on('request',(req,res)=>{
+
     let {query,pathname :path} = url.parse(request.url,true)
     //console.log(x);
     //let path=request.url;
@@ -111,10 +116,8 @@ const server=http.createServer((request,response)=>{
         });
         response.end(html.replace('{{%CONTENT%}}','Error 404:page not found!'));
     }
-    
 
-
-});
+})
 server.listen(8000,'127.0.0.1',()=>{
       console.log('server has started');
 
