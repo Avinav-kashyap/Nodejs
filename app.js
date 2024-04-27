@@ -28,6 +28,7 @@ server.listen(8000,'127.0.0.1',()=>{
 const fs=require('fs');
 const http=require('http');
 const url=require('url');
+
 const replaceHtml=require('./Modules/replaceHtml');
 const html=fs.readFileSync('./Template/index.html','utf-8')
 let products=JSON.parse(fs.readFileSync('./Data/products.json','utf-8'))
