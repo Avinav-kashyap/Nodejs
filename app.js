@@ -28,9 +28,11 @@ server.listen(8000,'127.0.0.1',()=>{
 const fs=require('fs');
 const http=require('http');
 const url=require('url');
+const replaceHtml=require('./Modules/replaceHtml');
 const html=fs.readFileSync('./Template/index.html','utf-8')
 let products=JSON.parse(fs.readFileSync('./Data/products.json','utf-8'))
 let productListHtml=fs.readFileSync('./Template/product-list.html','utf-8')
+let productDetailHtml=fs.readFileSync('./Template/product-details.html','utf-8')
 let productHtmlArray=products.map((prod)=>{
     let output=productListHtml.replace('{{%IMAGE%}}',prod.productImage);
     output=output.replace('{{%NAME%}}',prod.name);
@@ -45,6 +47,13 @@ let productHtmlArray=products.map((prod)=>{
     return output;
 
 })
+
+
+
+
+
+
+
 
 const server=http.createServer((request,response)=>{
     let {query,pathname :path} = url.parse(request.url,true)
@@ -77,6 +86,9 @@ const server=http.createServer((request,response)=>{
     else if(path.toLocaleLowerCase() === '/products')
     {
         if(!query.id){
+            let productHtmlArray=product.map((prod)=>{
+                return replaceHtml(productListHtml,prod);
+            })
             let productResponseHtml=html.replace('{{%CONTENT%}}',productHtmlArray.join(','));
         response.writeHead(200,{
             'Content-type':'text/html'});
@@ -84,7 +96,9 @@ const server=http.createServer((request,response)=>{
 
         }
         else{
-            response.end('This is a product with ID=' + query.id);
+            let prod=products[query.id]
+            let productDetailResponseHtml = replaceHtml(productDetailHtml,prod);
+            response.end(html.replace('{{%CONTENT%}}',productDetailResponseHtml));
         }
         
             
