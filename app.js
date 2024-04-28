@@ -25,7 +25,7 @@ server.listen(8000,'127.0.0.1',()=>{
 })**/
 
 //lec 14
-const fs=require('fs');
+/*const fs=require('fs');
 const http=require('http');
 const url=require('url');
 
@@ -122,4 +122,8 @@ server.on('request',(req,res)=>{
 server.listen(8000,'127.0.0.1',()=>{
       console.log('server has started');
 
-});
+});*/
+
+
+//lec 29 event loop in practice
+
