@@ -21,6 +21,31 @@ app.get('/api/v1/movies',(req,res)=>{
 
 });
 
+//GET -  api/v1/movies/id
+app.get('/api/v1/movies/:id',(req,res)=>{
+    console.log(req.params);
+    //CONVERT ID TO NUMERIC VALUE
+    const id=req.params.id *1;
+    //FIND THE MOVIE BASED ON THE PARAMETER
+    let movie=movies.find((el)=>{
+         return el.id === id
+
+    });
+    if(!movie){
+        return res.status(404).json({
+            status:"fail",
+            message:'Movie with ID '+ id + '  is not found'
+        })
+
+    }
+    res.status(200).json({
+        status:"success",
+        data:{
+            movie:movie
+        }
+    });
+})
+
 
 //POST-api/v1/movies
 app.post('/api/v1/movies',(req,res)=>{
