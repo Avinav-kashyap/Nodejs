@@ -93,6 +93,35 @@ app.patch('/api/v1/movies/:id',(req,res)=>{
 
     })
 })
+
+app.delete('/api/v1/movies/:id',(req,res)=>{
+    const id=req.params.id * 1;
+    const movieToDelete=movies.find(el => el.id === id);
+    if(!movieToDelete){
+        return res.status(404).json({
+            status:'fail',
+            message :"No movie object with ID "+ id +" is found to delete"
+        })
+
+    }
+    let index=movies.indexOf(movieToDelete);
+
+    movies.splice(index,1);
+
+    fs.writeFile('./data/movies.json',JSON.stringify(movies),(err)=>{
+        res.status(204).json({
+            status:"success",
+            data:{
+                movie:null
+            }
+         })
+
+
+    })
+})
+
+
+
 //create a server
 const port=3000;
 app.listen(port,()=>{
